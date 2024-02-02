@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+  <h2>Transaction Form</h2>
+
+  <!-- Deposit Form -->
+  <form id="depositForm">
+    <div class="form-group">
+      <label for="codecompteDeposit">Code Compte:</label>
+      <input type="text" class="form-control" id="codecompteDeposit" placeholder="Enter code compte" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mantantDeposit">Montant:</label>
+      <input type="number" class="form-control" id="mantantDeposit" placeholder="Enter montant" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="submitForm('deposit')">Deposit</button>
+  </form>
+
+  <!-- Withdrawal Form -->
+  <form id="withdrawalForm">
+    <div class="form-group">
+      <label for="codecompteWithdrawal">Code Compte:</label>
+      <input type="text" class="form-control" id="codecompteWithdrawal" placeholder="Enter code compte" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mantantWithdrawal">Montant:</label>
+      <input type="number" class="form-control" id="mantantWithdrawal" placeholder="Enter montant" required>
+    </div>
+
+    <button type="button" class="btn btn-danger" onclick="submitForm('withdrawal')">Withdrawal</button>
+  </form>
+
+  <!-- Verment Form -->
+  <form id="vermentForm">
+    <div class="form-group">
+      <label for="codecompteVerment">Code Compte:</label>
+      <input type="text" class="form-control" id="codecompteVerment" placeholder="Enter code compte" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mantantVerment">Montant:</label>
+      <input type="number" class="form-control" id="mantantVerment" placeholder="Enter montant" required>
+    </div>
+
+    <div class="form-group">
+      <label for="codecompte2Verment">Code Compte 2:</label>
+      <input type="text" class="form-control" id="codecompte2Verment" placeholder="Enter code compte 2" required>
+    </div>
+
+    <button type="button" class="btn btn-success" onclick="submitForm('verment')">Verment</button>
+  </form>
+</div>
+
+<!-- ... (previous HTML code) ... -->
+
+<script>
+  function submitForm(operation) {
+    const codecompteField = operation === 'deposit' ? 'codecompteDeposit' :
+            (operation === 'withdrawal' ? 'codecompteWithdrawal' : 'codecompteVerment');
+
+    const mantantField = operation === 'deposit' ? 'mantantDeposit' :
+            (operation === 'withdrawal' ? 'mantantWithdrawal' : 'mantantVerment');
+
+    const codecompte2Field = operation === 'verment' ? 'codecompte2Verment' : null;
+
+    const codecompte = document.getElementById(codecompteField).value;
+    const mantant = document.getElementById(mantantField).value;
+    const codecompte2 = operation === 'verment' ? document.getElementById(codecompte2Field).value : null;
+
+    const formData = {
+      codecompte: codecompte,
+      mantant: parseFloat(mantant),
+      codeCompte2: codecompte2
+    };
+
+    const url = operation === 'deposit' ? '/versait' :
+            (operation === 'withdrawal' ? '/retrait' : '/verment');
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              // Handle success
+              console.log(`${operation} successful`);
+              resetFormFields(codecompteField, mantantField, codecompte2Field);
+            })
+            .catch(error => {
+              // Handle error
+              console.error(`There was a problem with the ${operation} operation:`, error);
+            });
+  }
+
+  function resetFormFields(codecompteField, mantantField, codecompte2Field) {
+    document.getElementById(codecompteField).value = '';
+    document.getElementById(mantantField).value = '';
+    if (codecompte2Field) {
+      document.getElementById(codecompte2Field).value = '';
+    }
+  }
+</script>
+
+<!-- ... (remaining HTML code) ... -->
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

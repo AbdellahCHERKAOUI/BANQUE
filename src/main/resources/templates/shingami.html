@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Bootstrap Button Example</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-image: url('/changements.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .custom-background {
+      background-image: url('/changements.png');
+      background-size: cover;
+      color: white; /* Adjust text color for better visibility */
+    }
+    .container {
+      text-align: center;
+    }
+    .custom-button {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row mb-3">
+    <div class="col-md">
+      <button  type="button" onclick="window.location.href='/operation'" class="btn btn-primary custom-background custom-button">Button 1</button>
+      <button type="button" class="btn btn-secondary custom-button">Button 2</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <button type="button" class="btn btn-success custom-button">Button 3</button>
+      <button type="button" class="btn btn-danger custom-button">Button 4</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

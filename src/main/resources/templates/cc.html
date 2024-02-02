@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attribute Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Attribute Form</h2>
+
+  <form id="attributeForm">
+    <div class="form-group">
+      <label for="email">Last Name:</label>
+      <input type="text" class="form-control" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="name">First Name:</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="saveClient()">Save</button>
+  </form>
+</div>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Client Details</h2>
+
+  <form id="clientDetailsForm">
+    <div class="form-group">
+      <label for="clientId">Client ID:</label>
+      <input type="number" class="form-control" id="clientId" name="clientId" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="fetchClientDetails()">Fetch Client Details</button>
+  </form>
+  <button><a href="compte.html">CREATE-COMPTE</a></button>
+
+  <div id="clientDetails" class="mt-4">
+    <!-- Client details will be displayed here -->
+  </div>
+</div>
+
+<script>
+  function saveClient() {
+    var email = document.getElementById("email").value;
+    var name = document.getElementById("name").value;
+
+    var data = {
+      "email": email,
+      "name": name
+    };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/create-client", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          console.log("Client created:", response);
+          // Handle success
+        } else {
+          console.error("Error creating client:", xhr.status);
+          // Handle error
+        }
+      }
+    };
+
+    xhr.send(JSON.stringify(data));
+  }
+
+  function fetchClientDetails() {
+    var clientId = document.getElementById("clientId").value;
+
+    fetch("/client/" + clientId)
+            .then(response => response.json())
+            .then(displayClientDetails)
+            .catch(error => {
+              console.error("Error fetching client details:", error);
+              // Handle error
+            });
+  }
+
+  function displayClientDetails(client) {
+    var clientDetailsContainer = document.getElementById("clientDetails");
+    clientDetailsContainer.innerHTML = "";
+
+    if (client) {
+      var detailsHtml = "<h4>Client Details:</h4>";
+      detailsHtml += "<p><strong>ID:</strong> " + client.code + "</p>";
+      detailsHtml += "<p><strong>Last Name:</strong> " + client.nom + "</p>";
+      detailsHtml += "<p><strong>First Name:</strong> " + client.name + "</p>";
+      // Add more details as needed
+
+      clientDetailsContainer.innerHTML = detailsHtml;
+    } else {
+      clientDetailsContainer.innerHTML = "<p class='text-danger'>Client not found</p>";
+    }
+  }
+</script>
+
+</body>
+</html>
